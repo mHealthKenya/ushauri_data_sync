@@ -9,11 +9,14 @@ use App\Appointment;
 use App\AppointmentFaces;
 use App\Client;
 use App\ClientFaces;
+use App\ClientOutcome;
+use App\User;
+use App\UserFaces;
 
 class SyncController extends Controller {
  public function index() {
-//   $this->syncUsers();
-  //   $this->syncClients();
+  $this->syncUsers();
+  $this->syncClients();
   $this->syncAppointments();
   $this->syncClientOutcomes();
  }
