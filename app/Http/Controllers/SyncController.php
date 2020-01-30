@@ -10,6 +10,7 @@ use App\AppointmentFaces;
 use App\Client;
 use App\ClientFaces;
 use App\ClientOutcome;
+use App\ClientOutcomeFaces;
 use App\User;
 use App\UserFaces;
 
