@@ -15,10 +15,10 @@ use App\UserFaces;
 
 class SyncController extends Controller {
  public function index() {
- //$this->syncUsers();
-  //$this->syncClients();
+  $this->syncUsers();
+  $this->syncClients();
   $this->syncAppointments();
-  //$this->syncClientOutcomes();
+  $this->syncClientOutcomes();
  }
 
  public function syncUsers() {
