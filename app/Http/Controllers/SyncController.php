@@ -39,7 +39,7 @@ class SyncController extends Controller {
 
  public function syncAppointments() {
   $max_exisiting_appointment = AppointmentFaces::max('id') ?? 0;
-  $appointments              = Appointment::join('tbl_client', 'tbl_appointment.client_id', '=', 'tbl_client.id')->select('tbl_appointment.*')->where('tbl_appointment.id', '>', $max_exisiting_appointment)->where('tbl_client.partner_id', 18)->get();
+  $appointments              = Appointment::join('tbl_client', 'tbl_appointment.client_id', '=', 'tbl_client.id')->select('tbl_appointment.*')->where('tbl_appointment.id', '>', $max_exisiting_appointment)->where('tbl_client.partner_id', 18)->limit(10000)->get();
   foreach ($appointments as $appointment) {
    AppointmentFaces::insert($appointment->toArray());
   }
@@ -47,7 +47,7 @@ class SyncController extends Controller {
 
  public function syncClientOutcomes() {
   $max_exisiting_client_outcome = ClientOutcomeFaces::max('id') ?? 0;
-  $client_outcomes              = ClientOutcome::join('tbl_client', 'tbl_clnt_outcome.client_id', '=', 'tbl_client.id')->select('tbl_clnt_outcome.*')->where('tbl_clnt_outcome.id', '>', $max_exisiting_client_outcome)->where('tbl_client.partner_id', 18)->get();
+  $client_outcomes              = ClientOutcome::join('tbl_client', 'tbl_clnt_outcome.client_id', '=', 'tbl_client.id')->select('tbl_clnt_outcome.*')->where('tbl_clnt_outcome.id', '>', $max_exisiting_client_outcome)->where('tbl_client.partner_id', 18)->limit(10000)->get();
   foreach ($client_outcomes as $client_outcome) {
    ClientOutcomeFaces::insert($client_outcome->toArray());
   }
