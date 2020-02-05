@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 ini_set('max_execution_time', 0);
-ini_set('memory_limit', '1024M');
+ini_set('memory_limit', '2048M');
 
 use App\Appointment;
 use App\AppointmentFaces;
@@ -32,17 +32,17 @@ class SyncController extends Controller
 {
   public function index()
   {
-    $this->syncUsers();
+    // $this->syncUsers();
     $this->syncClients();
-    $this->syncAppointments();
-    $this->syncClientOutcomes();
-    $this->syncClientOutgoing();
-    $this->syncUserOutgoing();
-    $this->syncOtherAppType();
-    $this->syncOtherFnlOutcome();
-    $this->syncBroadcast();
-    $this->syncSmsQueue();
-    $this->syncTransitClients();
+    //$this->syncAppointments();
+    //$this->syncClientOutcomes();
+    //$this->syncClientOutgoing();
+    // $this->syncUserOutgoing();
+    // $this->syncOtherAppType();
+    // $this->syncOtherFnlOutcome();
+    // $this->syncBroadcast();
+    // $this->syncSmsQueue();
+    // $this->syncTransitClients();
   }
 
   public function syncUsers()
@@ -57,9 +57,15 @@ class SyncController extends Controller
   {
     $max_exisiting_client = ClientFaces::max('id') ?? 0;
 
-    $clients = Client::where('partner_id', 18)->where('id', '>', $max_exisiting_client)->get();
+    $clients = Client::where('partner_id', 18)->where('id', '>', $max_exisiting_client)->limit(1000)->get();
     foreach ($clients as $client) {
-      ClientFaces::insert($client->toArray());
+      if ($client->created_at == $client->updated_at) {
+        //ClientFaces::insert($client->toArray());
+        echo "Hawa" . "<br>";
+      } else {
+        //ClientFaces::update($client->toArray());
+        echo "Wanafaa Update" . "<br>";
+      }
     }
   }
 
