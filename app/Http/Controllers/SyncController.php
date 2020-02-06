@@ -33,17 +33,17 @@ class SyncController extends Controller
 {
   public function index()
   {
-    // $this->syncUsers();
-    $this->syncClients();
-    // $this->syncAppointments();
+    $this->syncUsers();
+    //$this->syncClients();
+    //$this->syncAppointments();
     // $this->syncClientOutcomes();
-    // $this->syncClientOutgoing();
     // $this->syncUserOutgoing();
     // $this->syncOtherAppType();
     // $this->syncOtherFnlOutcome();
     // $this->syncBroadcast();
     // $this->syncSmsQueue();
     // $this->syncTransitClients();
+    // $this->syncClientOutgoing();
   }
 
   public function syncUsers()
@@ -53,29 +53,37 @@ class SyncController extends Controller
     foreach ($users as $user) {
       $userFaces = UserFaces::find($user->id);
       if (!$userFaces) {
+        echo "Inserting new User..." . "<br>";
         UserFaces::insert($user->toArray());
+      }
+    }
+    $updates_users = User::where('partner_id', 18)->where('updated_at', '>', Carbon::now()->subDays(10))->get();
+    foreach ($updates_users as $updates_user) {
+      $FoundUsers = UserFaces::find($updates_user->id);
+      if ($FoundUsers) {
+        echo "Updating existing User..." . "<br>";
+        UserFaces::whereId($updates_user->id)->update($updates_user->toArray());
       }
     }
   }
   public function syncClients()
   {
-    // $max_exisiting_client = ClientFaces::max('id') ?? 0;
+    $max_exisiting_client = ClientFaces::max('id') ?? 0;
 
-    // $clients = Client::where('partner_id', 18)->where('id', '>', $max_exisiting_client)->get();
-    // foreach ($clients as $client) {
-    //   $clientFaces = ClientFaces::find($client->id);
-    //   if (!$clientFaces) {
-    //     ClientFaces::insert($client->toArray());
-    //   }
-    // }
+    $clients = Client::where('partner_id', 18)->where('id', '>', $max_exisiting_client)->get();
+    foreach ($clients as $client) {
+      $clientFaces = ClientFaces::find($client->id);
+      if (!$clientFaces) {
+        echo "Inserting new Client..." . "<br>";
+        ClientFaces::insert($client->toArray());
+      }
+    }
     $updates_availables = Client::where('partner_id', 18)->where('updated_at', '>', Carbon::now()->subDays(10))->get();
     foreach ($updates_availables as $updates_available) {
       $FoundClients = ClientFaces::find($updates_available->id);
       if ($FoundClients) {
-        echo "Wabebe" . "<br>";
+        echo "Updating existing Client..." . "<br>";
         ClientFaces::whereId($updates_available->id)->update($updates_available->toArray());
-      } else {
-        echo "Clients not found" . "<br>";
       }
     }
   }
@@ -87,7 +95,16 @@ class SyncController extends Controller
     foreach ($appointments as $appointment) {
       $appFaces = AppointmentFaces::find($appointment->id);
       if (!$appFaces) {
+        echo "Insert new Appointment..." . "<br>";
         AppointmentFaces::insert($appointment->toArray());
+      }
+    }
+    $appointment_updates = Appointment::join('tbl_client', 'tbl_appointment.client_id', '=', 'tbl_client.id')->select('tbl_appointment.*')->where('tbl_appointment.updated_at', '>', Carbon::now()->subDays(10))->where('tbl_client.partner_id', 18)->get();
+    foreach ($appointment_updates as $appointment_update) {
+      $FoundApp = AppointmentFaces::find($appointment_update->id);
+      if ($FoundApp) {
+        echo "Updating existing appointment..." .  "<br>";
+        AppointmentFaces::whereId($appointment_update->id)->update($appointment_update->toArray());
       }
     }
   }
