@@ -68,7 +68,7 @@ class SyncController extends Controller
     //     ClientFaces::insert($client->toArray());
     //   }
     // }
-    $updates_availables = Client::where('partner_id', 18)->where('updated_at', '>', Carbon::now()->subDays(10))->limit(100)->get();
+    $updates_availables = Client::where('partner_id', 18)->where('updated_at', '>', Carbon::now()->subDays(10))->get();
     foreach ($updates_availables as $updates_available) {
       $FoundClients = ClientFaces::find($updates_available->id);
       if ($FoundClients) {
