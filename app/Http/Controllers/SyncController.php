@@ -33,17 +33,17 @@ class SyncController extends Controller
 {
   public function index()
   {
-    //$this->syncUsers();
+    $this->syncUsers();
     $this->syncClients();
     $this->syncAppointments();
-    //$this->syncClientOutcomes();
-    // $this->syncUserOutgoing();
-    // $this->syncOtherAppType();
-    // $this->syncOtherFnlOutcome();
-    // $this->syncBroadcast();
-    // $this->syncSmsQueue();
-    // $this->syncTransitClients();
-    // $this->syncClientOutgoing();
+    $this->syncClientOutcomes();
+    $this->syncUserOutgoing();
+    $this->syncOtherAppType();
+    $this->syncOtherFnlOutcome();
+    $this->syncBroadcast();
+    $this->syncSmsQueue();
+    $this->syncTransitClients();
+    $this->syncClientOutgoing();
   }
 
   public function syncUsers()
