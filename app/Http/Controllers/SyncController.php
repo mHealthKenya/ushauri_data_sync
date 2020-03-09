@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 ini_set('max_execution_time', 0);
-ini_set('memory_limit', '2048M');
+ini_set('memory_limit', '4096M');
 
 use App\Appointment;
 use App\AppointmentFaces;
@@ -37,7 +37,7 @@ class SyncController extends Controller
     $this->syncClients();
     $this->syncAppointments();
     $this->syncClientOutcomes();
-    $this->syncUserOutgoing();
+    //$this->syncUserOutgoing();
     $this->syncOtherAppType();
     $this->syncOtherFnlOutcome();
     $this->syncBroadcast();
