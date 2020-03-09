@@ -33,17 +33,17 @@ class SyncController extends Controller
 {
   public function index()
   {
-    $this->syncUsers();
-    $this->syncClients();
-    $this->syncAppointments();
-    $this->syncClientOutcomes();
-    $this->syncUserOutgoing();
-    $this->syncOtherAppType();
+    // $this->syncUsers();
+    //$this->syncClients();
+    //$this->syncAppointments();
+    //$this->syncClientOutcomes();
+    // $this->syncUserOutgoing();
+    //$this->syncOtherAppType();
     $this->syncOtherFnlOutcome();
-    $this->syncBroadcast();
-    $this->syncSmsQueue();
-    $this->syncTransitClients();
-    $this->syncClientOutgoing();
+    // $this->syncBroadcast();
+    // $this->syncSmsQueue();
+    // $this->syncTransitClients();
+    // $this->syncClientOutgoing();
   }
 
   public function syncUsers()
@@ -151,11 +151,17 @@ class SyncController extends Controller
   public function syncOtherAppType()
   {
     $max_exisiting_other_app_type = OtherAppTypeFaces::max('id') ?? 0;
-    $other_app_types = OtherAppType::join('tbl_users', 'tbl_other_appointment_types.created_by', '=', 'tbl_users.id')->select('tbl_other_appointment_types.*')->where('tbl_other_appointment_types.id', '>', $max_exisiting_other_app_type)->where('tbl_users.partner_id', 18)->get();
+    $other_app_types = OtherAppType::join('tbl_users', 'tbl_other_appointment_types.created_by', '=', 'tbl_users.id')
+      ->join('tbl_appointment', 'tbl_other_appointment_types.appointment_id', '=', 'tbl_appointment.id')
+      ->select('tbl_other_appointment_types.*')->where('tbl_other_appointment_types.id', '>', $max_exisiting_other_app_type)
+      ->where('tbl_users.partner_id', 18)->get();
     foreach ($other_app_types as $other_app_type) {
       $otherAppFaces = OtherAppTypeFaces::find($other_app_type->id);
       if (!$otherAppFaces) {
-        OtherAppTypeFaces::insert($other_app_type->toArray());
+        $check_app_existence = AppointmentFaces::find($other_app_type->appointment_id);
+        if ($check_app_existence) {
+          OtherAppTypeFaces::insert($other_app_type->toArray());
+        }
       }
     }
   }
@@ -167,7 +173,10 @@ class SyncController extends Controller
     foreach ($other_outcomes as $other_outcome) {
       $otherfnlOutocmeFaces = OtherFnlOutcomeFaces::find($other_outcome->id);
       if (!$otherfnlOutocmeFaces) {
-        OtherFnlOutcomeFaces::insert($other_outcome->toArray());
+        $check_Outcome_existence = ClientOutcomeFaces::find($other_outcome->client_outcome_id);
+        if ($check_Outcome_existence) {
+          OtherFnlOutcomeFaces::insert($other_outcome->toArray());
+        }
       }
     }
   }
