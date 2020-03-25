@@ -37,7 +37,7 @@ class SyncController extends Controller
     $this->syncClients();
     $this->syncAppointments();
     $this->syncClientOutcomes();
-    //$this->syncUserOutgoing();
+    $this->syncUserOutgoing();
     $this->syncOtherAppType();
     $this->syncOtherFnlOutcome();
     $this->syncBroadcast();
@@ -73,9 +73,10 @@ class SyncController extends Controller
     $clients = Client::where('partner_id', 18)->where('id', '>', $max_exisiting_client)->get();
     foreach ($clients as $client) {
       $clientFaces = ClientFaces::find($client->id);
+
       if (!$clientFaces) {
         echo "Inserting new Client..." . "<br>";
-        ClientFaces::insert($client->toArray());
+        ClientFaces::insertOrIgnore($client->toArray());
       }
     }
     $updates_availables = Client::where('partner_id', 18)->where('updated_at', '>', Carbon::now()->subDays(1))->get();
