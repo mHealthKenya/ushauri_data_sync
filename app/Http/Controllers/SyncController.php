@@ -120,7 +120,7 @@ class SyncController extends Controller
     foreach ($client_outcomes as $client_outcome) {
       $outcomesFaces = ClientOutcomeFaces::find($client_outcome->id);
       if (!$outcomesFaces) {
-        ClientOutcomeFaces::insert($client_outcome->toArray());
+        ClientOutcomeFaces::insertOrIgnore($client_outcome->toArray());
       }
     }
   }
@@ -132,7 +132,7 @@ class SyncController extends Controller
     foreach ($client_outgoings as $client_outgoing) {
       $clientOutgoingFaces = ClientOutgoingFaces::find($client_outgoing->id);
       if (!$clientOutgoingFaces) {
-        ClientOutgoingFaces::insert($client_outgoing->toArray());
+        ClientOutgoingFaces::insertOrIgnore($client_outgoing->toArray());
       }
     }
   }
@@ -161,7 +161,7 @@ class SyncController extends Controller
       if (!$otherAppFaces) {
         $check_app_existence = AppointmentFaces::find($other_app_type->appointment_id);
         if ($check_app_existence) {
-          OtherAppTypeFaces::insert($other_app_type->toArray());
+          OtherAppTypeFaces::insertOrIgnore($other_app_type->toArray());
         }
       }
     }
@@ -176,7 +176,7 @@ class SyncController extends Controller
       if (!$otherfnlOutocmeFaces) {
         $check_Outcome_existence = ClientOutcomeFaces::find($other_outcome->client_outcome_id);
         if ($check_Outcome_existence) {
-          OtherFnlOutcomeFaces::insert($other_outcome->toArray());
+          OtherFnlOutcomeFaces::insertOrIgnore($other_outcome->toArray());
         }
       }
     }
@@ -189,7 +189,7 @@ class SyncController extends Controller
     foreach ($broadcasts as $broadcast) {
       $broadcastFaces = BroadcastFaces::find($broadcast->id);
       if (!$broadcastFaces) {
-        BroadcastFaces::insert($broadcast->toArray());
+        BroadcastFaces::insertOrIgnore($broadcast->toArray());
       }
     }
   }
@@ -201,7 +201,7 @@ class SyncController extends Controller
     foreach ($sms_queues as $sms_queue) {
       $smsQueueFaces = SmsQueueFaces::find($sms_queue->id);
       if (!$smsQueueFaces) {
-        SmsQueueFaces::insert($sms_queue->toArray());
+        SmsQueueFaces::insertOrIgnore($sms_queue->toArray());
       }
     }
   }
