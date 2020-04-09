@@ -35,7 +35,7 @@ class SyncController extends Controller
   {
     $this->syncUsers();
     $this->syncClients();
-    $this->syncAppointments();
+    //$this->syncAppointments();
     $this->syncClientOutcomes();
     $this->syncUserOutgoing();
     $this->syncOtherAppType();

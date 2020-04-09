@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 Route::get('/sync', ['uses' => 'SyncController@index', 'as' => 'sync']);
+Route::get('/sync_app', ['uses' => 'SyncController@syncAppointments', 'as' => 'sync_app']);
