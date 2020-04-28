@@ -42,7 +42,7 @@ class SyncController extends Controller
     $this->syncBroadcast();
     $this->syncSmsQueue();
     $this->syncTransitClients();
-    $this->syncClientOutgoing();
+    //$this->syncClientOutgoing();
     //$this->syncAppointments();
     //$this->syncUserOutgoing();
   }
@@ -91,20 +91,6 @@ class SyncController extends Controller
     }
   }
 
-  // public function update_check()
-  // {
-  //   $from = date('2020-03-01');
-  //   $to = date('2020-03-31');
-
-  //   $updated_faces =  ClientFaces::whereBetween('updated_at', [$from, $to])->get();
-  //   foreach ($updated_faces as $faces) {
-  //     $notsame = Client::where('partner_id', 18)->whereBetween('updated_at', [$from, $to])->where('updated_at', '!=', $faces->updated_at)->get();
-  //     foreach ($notsame as $not) {
-  //       echo json_encode($not->id);
-  //     }
-  //   }
-  // }
-
   public function syncAppointments()
   {
     $max_exisiting_appointment = AppointmentFaces::max('id') ?? 0;
@@ -136,6 +122,7 @@ class SyncController extends Controller
     foreach ($client_outcomes as $client_outcome) {
       $outcomesFaces = ClientOutcomeFaces::find($client_outcome->id);
       if (!$outcomesFaces) {
+        echo "Inserting Client Outcomes..." .  "<br>";
         ClientOutcomeFaces::insertOrIgnore($client_outcome->toArray());
       }
     }
