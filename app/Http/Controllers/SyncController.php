@@ -33,6 +33,7 @@ class SyncController extends Controller
 {
   public function index()
   {
+
     $this->syncUsers();
     $this->syncClients();
     $this->syncClientOutcomes();
@@ -57,7 +58,7 @@ class SyncController extends Controller
         UserFaces::insert($user->toArray());
       }
     }
-    $updates_users = User::where('partner_id', 18)->where('updated_at', '>', Carbon::now()->subDays(10))->get();
+    $updates_users = User::where('partner_id', 18)->where('updated_at', '>', Carbon::now()->subDays(1))->get();
     foreach ($updates_users as $updates_user) {
       $FoundUsers = UserFaces::find($updates_user->id);
       if ($FoundUsers) {
@@ -79,6 +80,7 @@ class SyncController extends Controller
         ClientFaces::insertOrIgnore($client->toArray());
       }
     }
+
     $updates_availables = Client::where('partner_id', 18)->where('updated_at', '>', Carbon::now()->subDays(1))->get();
     foreach ($updates_availables as $updates_available) {
       $FoundClients = ClientFaces::find($updates_available->id);
@@ -88,6 +90,20 @@ class SyncController extends Controller
       }
     }
   }
+
+  // public function update_check()
+  // {
+  //   $from = date('2020-03-01');
+  //   $to = date('2020-03-31');
+
+  //   $updated_faces =  ClientFaces::whereBetween('updated_at', [$from, $to])->get();
+  //   foreach ($updated_faces as $faces) {
+  //     $notsame = Client::where('partner_id', 18)->whereBetween('updated_at', [$from, $to])->where('updated_at', '!=', $faces->updated_at)->get();
+  //     foreach ($notsame as $not) {
+  //       echo json_encode($not->id);
+  //     }
+  //   }
+  // }
 
   public function syncAppointments()
   {
