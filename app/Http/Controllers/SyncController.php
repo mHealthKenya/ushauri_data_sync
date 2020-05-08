@@ -71,7 +71,7 @@ class SyncController extends Controller
   {
     $max_exisiting_client = ClientFaces::max('id') ?? 0;
 
-    $clients = Client::where('partner_id', 18)->where('id', '>', $max_exisiting_client)->get();
+    $clients = Client::where('partner_id', 18)->where('mfl_code', '!=', 13899)->where('id', '>', $max_exisiting_client)->get();
     foreach ($clients as $client) {
       $clientFaces = ClientFaces::find($client->id);
 
@@ -81,12 +81,14 @@ class SyncController extends Controller
       }
     }
 
-    $updates_availables = Client::where('partner_id', 18)->where('updated_at', '>', Carbon::now()->subDays(1))->get();
+    $updates_availables = Client::where('partner_id', 18)->where('mfl_code', '!=', 13899)->where('updated_at', '>', Carbon::now()->subDays(100))->get();
     foreach ($updates_availables as $updates_available) {
       $FoundClients = ClientFaces::find($updates_available->id);
       if ($FoundClients) {
-        echo "Updating existing Client..." . "<br>";
-        ClientFaces::whereId($updates_available->id)->update($updates_available->toArray());
+        if ($FoundClients->updated_at < $updates_available->updated_at) {
+          echo "Updating existing Client..." . "<br>";
+          ClientFaces::whereId($updates_available->id)->update($updates_available->toArray());
+        }
       }
     }
   }
