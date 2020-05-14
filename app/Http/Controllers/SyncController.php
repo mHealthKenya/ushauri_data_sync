@@ -36,8 +36,8 @@ class SyncController extends Controller
 
     // $this->syncUsers();
     //$this->syncClients();
-    $this->syncClientOutcomes();
-    // $this->syncOtherAppType();
+    //$this->syncClientOutcomes();
+    $this->syncOtherAppType();
     // $this->syncOtherFnlOutcome();
     // $this->syncBroadcast();
     // $this->syncSmsQueue();
@@ -166,6 +166,7 @@ class SyncController extends Controller
       if (!$otherAppFaces) {
         $check_app_existence = AppointmentFaces::find($other_app_type->appointment_id);
         if ($check_app_existence) {
+          echo "Insert other app type..." . "<br>";
           OtherAppTypeFaces::insertOrIgnore($other_app_type->toArray());
         }
       }
