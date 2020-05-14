@@ -34,14 +34,14 @@ class SyncController extends Controller
   public function index()
   {
 
-    $this->syncUsers();
+    // $this->syncUsers();
     $this->syncClients();
-    $this->syncClientOutcomes();
-    $this->syncOtherAppType();
-    $this->syncOtherFnlOutcome();
-    $this->syncBroadcast();
-    $this->syncSmsQueue();
-    $this->syncTransitClients();
+    // $this->syncClientOutcomes();
+    // $this->syncOtherAppType();
+    // $this->syncOtherFnlOutcome();
+    // $this->syncBroadcast();
+    // $this->syncSmsQueue();
+    // $this->syncTransitClients();
     //$this->syncClientOutgoing();
     //$this->syncAppointments();
     //$this->syncUserOutgoing();
@@ -85,10 +85,10 @@ class SyncController extends Controller
     foreach ($updates_availables as $updates_available) {
       $FoundClients = ClientFaces::find($updates_available->id);
       if ($FoundClients) {
-        if ($FoundClients->updated_at < $updates_available->updated_at) {
-          echo "Updating existing Client..." . "<br>";
-          ClientFaces::whereId($updates_available->id)->update($updates_available->toArray());
-        }
+        //if ($FoundClients->updated_at < $updates_available->updated_at) {
+        echo "Updating existing Client..." . "<br>";
+        ClientFaces::whereId($updates_available->id)->update($updates_available->toArray());
+        //}
       }
     }
   }
@@ -107,14 +107,14 @@ class SyncController extends Controller
         }
       }
     }
-    $appointment_updates = Appointment::join('tbl_client', 'tbl_appointment.client_id', '=', 'tbl_client.id')->select('tbl_appointment.*')->where('tbl_appointment.updated_at', '>', Carbon::now()->subDays(1))->where('tbl_client.partner_id', 18)->get();
-    foreach ($appointment_updates as $appointment_update) {
-      $FoundApp = AppointmentFaces::find($appointment_update->id);
-      if ($FoundApp) {
-        echo "Updating existing appointment..." .  "<br>";
-        AppointmentFaces::whereId($appointment_update->id)->update($appointment_update->toArray());
-      }
-    }
+    // $appointment_updates = Appointment::join('tbl_client', 'tbl_appointment.client_id', '=', 'tbl_client.id')->select('tbl_appointment.*')->where('tbl_appointment.updated_at', '>', Carbon::now()->subDays(1))->where('tbl_client.partner_id', 18)->get();
+    // foreach ($appointment_updates as $appointment_update) {
+    //   $FoundApp = AppointmentFaces::find($appointment_update->id);
+    //   if ($FoundApp) {
+    //     echo "Updating existing appointment..." .  "<br>";
+    //     AppointmentFaces::whereId($appointment_update->id)->update($appointment_update->toArray());
+    //   }
+    // }
   }
 
   public function syncClientOutcomes()
