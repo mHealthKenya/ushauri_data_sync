@@ -37,8 +37,8 @@ class SyncController extends Controller
     // $this->syncUsers();
     //$this->syncClients();
     //$this->syncClientOutcomes();
-    $this->syncOtherAppType();
-    // $this->syncOtherFnlOutcome();
+    //$this->syncOtherAppType();
+    $this->syncOtherFnlOutcome();
     // $this->syncBroadcast();
     // $this->syncSmsQueue();
     // $this->syncTransitClients();
@@ -182,6 +182,7 @@ class SyncController extends Controller
       if (!$otherfnlOutocmeFaces) {
         $check_Outcome_existence = ClientOutcomeFaces::find($other_outcome->client_outcome_id);
         if ($check_Outcome_existence) {
+          echo "Insert other final outcome..." . "<br>";
           OtherFnlOutcomeFaces::insertOrIgnore($other_outcome->toArray());
         }
       }
