@@ -34,14 +34,14 @@ class SyncController extends Controller
   public function index()
   {
 
-    $this->syncUsers();
+    //$this->syncUsers();
     $this->syncClients();
-    $this->syncClientOutcomes();
-    $this->syncOtherAppType();
-    $this->syncOtherFnlOutcome();
-    $this->syncBroadcast();
-    $this->syncSmsQueue();
-    $this->syncTransitClients();
+    // $this->syncClientOutcomes();
+    // $this->syncOtherAppType();
+    // $this->syncOtherFnlOutcome();
+    // $this->syncBroadcast();
+    // $this->syncSmsQueue();
+    // $this->syncTransitClients();
     //$this->syncClientOutgoing();
     //$this->syncAppointments();
     //$this->syncUserOutgoing();
@@ -81,14 +81,18 @@ class SyncController extends Controller
       }
     }
 
-    $updates_availables = Client::where('partner_id', 18)->where('updated_at', '>', Carbon::now()->subDays(1))->get();
+    $updates_availables = Client::where('partner_id', 18)->where('updated_at', '>', Carbon::now()->subDays(100))->get();
     foreach ($updates_availables as $updates_available) {
       $FoundClients = ClientFaces::find($updates_available->id);
       if ($FoundClients) {
-        //if ($FoundClients->updated_at < $updates_available->updated_at) {
-        echo "Updating existing Client..." . "<br>";
-        ClientFaces::whereId($updates_available->id)->update($updates_available->toArray());
-        //}
+        if ($FoundClients->id === $updates_available->id && $FoundClients->clinic_number === $updates_available->clinic_number) {
+          if ($FoundClients->updated_at < $updates_available->updated_at) {
+            echo "Updating existing Client..." . "<br>";
+            ClientFaces::whereId($updates_available->id)->update($updates_available->toArray());
+          }
+        } else {
+          continue;
+        }
       }
     }
   }
