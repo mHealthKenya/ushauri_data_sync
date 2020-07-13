@@ -120,6 +120,8 @@ class SyncController extends Controller
             echo "Updating existing appointment..." .  "<br>";
             AppointmentFaces::whereId($appointment_update->id)->update($appointment_update->toArray());
           }
+        } else {
+          continue;
         }
       }
     }
