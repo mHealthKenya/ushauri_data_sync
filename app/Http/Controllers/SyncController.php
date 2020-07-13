@@ -111,7 +111,7 @@ class SyncController extends Controller
         }
       }
     }
-    $appointment_updates = Appointment::join('tbl_client', 'tbl_appointment.client_id', '=', 'tbl_client.id')->select('tbl_appointment.*')->where('tbl_appointment.updated_at', '>', Carbon::now()->subDays(1))->where('tbl_client.partner_id', 18)->get();
+    $appointment_updates = Appointment::join('tbl_client', 'tbl_appointment.client_id', '=', 'tbl_client.id')->select('tbl_appointment.*')->where('tbl_appointment.updated_at', '>', Carbon::now()->subDays(100))->where('tbl_client.partner_id', 18)->get();
     foreach ($appointment_updates as $appointment_update) {
       $FoundApp = AppointmentFaces::find($appointment_update->id);
       if ($FoundApp) {
