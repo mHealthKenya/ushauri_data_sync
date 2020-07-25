@@ -72,15 +72,6 @@ return [
    'password' => env('DB_PASSWORD_FACES'),
   ],
 
-  'mysql_egpaf' => [
-    'driver'   => env('DB_CONNECTION_EGPAF'),
-    'host'     => env('DB_HOST_EGPAF'),
-    'port'     => env('DB_PORT_EGPAF'),
-    'database' => env('DB_DATABASE_EGPAF'),
-    'username' => env('DB_USERNAME_EGPAF'),
-    'password' => env('DB_PASSWORD_EGPAF'),
-   ],
-
   'pgsql'       => [
    'driver'         => 'pgsql',
    'url'            => env('DATABASE_URL'),
