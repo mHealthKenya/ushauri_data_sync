@@ -41,9 +41,11 @@ class EGPAFSyncController extends Controller
         $this->syncBroadcast();
         $this->syncSmsQueue();
         $this->syncTransitClients();
+
+
         //$this->syncClientOutgoing();
-    //$this->syncAppointments();
-    //$this->syncUserOutgoing();
+        //$this->syncAppointments();
+        //$this->syncUserOutgoing();
     }
 
     public function syncUsers()
@@ -99,7 +101,7 @@ class EGPAFSyncController extends Controller
     public function syncAppointments()
     {
         $max_exisiting_appointment = AppointmentEGPAF::max('id') ?? 0;
-        $appointments = Appointment::join('tbl_client', 'tbl_appointment.client_id', '=', 'tbl_client.id')->select('tbl_appointment.*')->where('tbl_appointment.id', '>', $max_exisiting_appointment)->where('tbl_client.partner_id', 18)->get();
+        $appointments = Appointment::join('tbl_client', 'tbl_appointment.client_id', '=', 'tbl_client.id')->select('tbl_appointment.*')->where('tbl_appointment.id', '>', $max_exisiting_appointment)->where('tbl_client.partner_id', 1)->get();
         foreach ($appointments as $appointment) {
             $appEGPAF = AppointmentEGPAF::find($appointment->id);
             if (!$appEGPAF) {
@@ -110,7 +112,7 @@ class EGPAFSyncController extends Controller
                 }
             }
         }
-        $appointment_updates = Appointment::join('tbl_client', 'tbl_appointment.client_id', '=', 'tbl_client.id')->select('tbl_appointment.*')->where('tbl_appointment.updated_at', '>', Carbon::now()->subDays(1))->where('tbl_client.partner_id', 18)->get();
+        $appointment_updates = Appointment::join('tbl_client', 'tbl_appointment.client_id', '=', 'tbl_client.id')->select('tbl_appointment.*')->where('tbl_appointment.updated_at', '>', Carbon::now()->subDays(1))->where('tbl_client.partner_id', 1)->get();
         foreach ($appointment_updates as $appointment_update) {
             $FoundApp = AppointmentEGPAF::find($appointment_update->id);
             if ($FoundApp) {
@@ -129,7 +131,7 @@ class EGPAFSyncController extends Controller
     public function syncClientOutcomes()
     {
         $max_exisiting_client_outcome = ClientOutcomeEGPAF::max('id') ?? 0;
-        $client_outcomes = ClientOutcome::join('tbl_client', 'tbl_clnt_outcome.client_id', '=', 'tbl_client.id')->select('tbl_clnt_outcome.*')->where('tbl_clnt_outcome.id', '>', $max_exisiting_client_outcome)->where('tbl_client.partner_id', 18)->get();
+        $client_outcomes = ClientOutcome::join('tbl_client', 'tbl_clnt_outcome.client_id', '=', 'tbl_client.id')->select('tbl_clnt_outcome.*')->where('tbl_clnt_outcome.id', '>', $max_exisiting_client_outcome)->where('tbl_client.partner_id', 1)->get();
         foreach ($client_outcomes as $client_outcome) {
             $outcomesEGPAF = ClientOutcomeEGPAF::find($client_outcome->id);
             if (!$outcomesEGPAF) {
@@ -142,7 +144,7 @@ class EGPAFSyncController extends Controller
     public function syncClientOutgoing()
     {
         $max_exisiting_client_outgoing = ClientOutgoingEGPAF::max('id') ?? 0;
-        $client_outgoings = ClientOutgoing::join('tbl_client', 'tbl_clnt_outgoing.clnt_usr_id', '=', 'tbl_client.id')->select('tbl_clnt_outgoing.*')->where('tbl_clnt_outgoing.id', '>', $max_exisiting_client_outgoing)->where('tbl_client.partner_id', 18)->get();
+        $client_outgoings = ClientOutgoing::join('tbl_client', 'tbl_clnt_outgoing.clnt_usr_id', '=', 'tbl_client.id')->select('tbl_clnt_outgoing.*')->where('tbl_clnt_outgoing.id', '>', $max_exisiting_client_outgoing)->where('tbl_client.partner_id', 1)->get();
         foreach ($client_outgoings as $client_outgoing) {
             $clientOutgoingEGPAF = ClientOutgoingEGPAF::find($client_outgoing->id);
             if (!$clientOutgoingEGPAF) {
@@ -154,7 +156,7 @@ class EGPAFSyncController extends Controller
     public function syncUserOutgoing()
     {
         $max_exisiting_user_outgoing = UserOutgoingEGPAF::max('id') ?? 0;
-        $user_outgoings = UserOutgoing::join('tbl_users', 'tbl_usr_outgoing.clnt_usr_id', '=', 'tbl_users.id')->select('tbl_usr_outgoing.*')->where('tbl_usr_outgoing.id', '>', $max_exisiting_user_outgoing)->where('tbl_users.partner_id', 18)->get();
+        $user_outgoings = UserOutgoing::join('tbl_users', 'tbl_usr_outgoing.clnt_usr_id', '=', 'tbl_users.id')->select('tbl_usr_outgoing.*')->where('tbl_usr_outgoing.id', '>', $max_exisiting_user_outgoing)->where('tbl_users.partner_id', 1)->get();
         foreach ($user_outgoings as $user_outgoing) {
             $userOutgoingEGPAF = UserOutgoingEGPAF::find($user_outgoing->id);
             if (!$userOutgoingEGPAF) {
@@ -167,9 +169,9 @@ class EGPAFSyncController extends Controller
     {
         $max_exisiting_other_app_type = OtherAppTypeEGPAF::max('id') ?? 0;
         $other_app_types = OtherAppType::join('tbl_users', 'tbl_other_appointment_types.created_by', '=', 'tbl_users.id')
-      ->join('tbl_appointment', 'tbl_other_appointment_types.appointment_id', '=', 'tbl_appointment.id')
-      ->select('tbl_other_appointment_types.*')->where('tbl_other_appointment_types.id', '>', $max_exisiting_other_app_type)
-      ->where('tbl_users.partner_id', 18)->get();
+            ->join('tbl_appointment', 'tbl_other_appointment_types.appointment_id', '=', 'tbl_appointment.id')
+            ->select('tbl_other_appointment_types.*')->where('tbl_other_appointment_types.id', '>', $max_exisiting_other_app_type)
+            ->where('tbl_users.partner_id', 1)->get();
         foreach ($other_app_types as $other_app_type) {
             $otherAppEGPAF = OtherAppTypeEGPAF::find($other_app_type->id);
             if (!$otherAppEGPAF) {
@@ -185,7 +187,7 @@ class EGPAFSyncController extends Controller
     public function syncOtherFnlOutcome()
     {
         $max_existing_other_fnl_outcome = OtherFnlOutcomeEGPAF::max('id') ?? 0;
-        $other_outcomes = OtherFnlOutcome::join('tbl_users', 'tbl_other_final_outcome.created_by', '=', 'tbl_users.id')->select('tbl_other_final_outcome.*')->where('tbl_other_final_outcome.id', '>', $max_existing_other_fnl_outcome)->where('tbl_users.partner_id', 18)->get();
+        $other_outcomes = OtherFnlOutcome::join('tbl_users', 'tbl_other_final_outcome.created_by', '=', 'tbl_users.id')->select('tbl_other_final_outcome.*')->where('tbl_other_final_outcome.id', '>', $max_existing_other_fnl_outcome)->where('tbl_users.partner_id', 1)->get();
         foreach ($other_outcomes as $other_outcome) {
             $otherfnlOutocmeEGPAF = OtherFnlOutcomeEGPAF::find($other_outcome->id);
             if (!$otherfnlOutocmeEGPAF) {
@@ -201,7 +203,7 @@ class EGPAFSyncController extends Controller
     public function syncBroadcast()
     {
         $max_existing_broadcast = BroadcastEGPAF::max('id') ?? 0;
-        $broadcasts = Broadcast::join('tbl_users', 'tbl_broadcast.created_by', '=', 'tbl_users.id')->select('tbl_broadcast.*')->where('tbl_broadcast.id', '>', $max_existing_broadcast)->where('tbl_users.partner_id', 18)->get();
+        $broadcasts = Broadcast::join('tbl_users', 'tbl_broadcast.created_by', '=', 'tbl_users.id')->select('tbl_broadcast.*')->where('tbl_broadcast.id', '>', $max_existing_broadcast)->where('tbl_users.partner_id', 1)->get();
         foreach ($broadcasts as $broadcast) {
             $broadcastEGPAF = BroadcastEGPAF::find($broadcast->id);
             if (!$broadcastEGPAF) {
@@ -213,7 +215,7 @@ class EGPAFSyncController extends Controller
     public function syncSmsQueue()
     {
         $max_existing_queues = SmsQueueEGPAF::max('id') ?? 0;
-        $sms_queues = SmsQueue::join('tbl_partner_facility', 'tbl_sms_queue.mfl_code', '=', 'tbl_partner_facility.mfl_code')->select('tbl_sms_queue.*')->where('tbl_sms_queue.id', '>', $max_existing_queues)->where('tbl_partner_facility.partner_id', 18)->limit(20000)->get();
+        $sms_queues = SmsQueue::join('tbl_partner_facility', 'tbl_sms_queue.mfl_code', '=', 'tbl_partner_facility.mfl_code')->select('tbl_sms_queue.*')->where('tbl_sms_queue.id', '>', $max_existing_queues)->where('tbl_partner_facility.partner_id', 1)->limit(20000)->get();
         foreach ($sms_queues as $sms_queue) {
             $smsQueueEGPAF = SmsQueueEGPAF::find($sms_queue->id);
             if (!$smsQueueEGPAF) {
@@ -225,7 +227,7 @@ class EGPAFSyncController extends Controller
     public function syncTransitClients()
     {
         $max_existing_transits = TransitEGPAF::max('id') ?? 0;
-        $sms_transits = Transit::join('tbl_client', 'tbl_transit_app.client_id', '=', 'tbl_client.id')->select('tbl_transit_app.*')->where('tbl_transit_app.id', '>', $max_existing_transits)->where('tbl_client.partner_id', 18)->get();
+        $sms_transits = Transit::join('tbl_client', 'tbl_transit_app.client_id', '=', 'tbl_client.id')->select('tbl_transit_app.*')->where('tbl_transit_app.id', '>', $max_existing_transits)->where('tbl_client.partner_id', 1)->get();
         foreach ($sms_transits as $sms_transit) {
             $transitEGPAF = TransitEGPAF::find($sms_transit->id);
             if (!$transitEGPAF) {
