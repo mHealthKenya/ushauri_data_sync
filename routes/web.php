@@ -21,3 +21,4 @@ Route::get('/sync_msg', ['uses' => 'SyncController@syncClientOutgoing', 'as' => 
 Route::get('/egpaf/sync', ['uses' => 'EGPAFSyncController@index', 'as' => 'egpaf_sync']);
 Route::get('/egpaf/sync_app', ['uses' => 'EGPAFSyncController@syncAppointments', 'as' => 'egpaf_sync_app']);
 Route::get('/egpaf/sync_msg', ['uses' => 'EGPAFSyncController@syncClientOutgoing', 'as' => 'egpaf_sync_msg']);
+Route::get('/nascop/sync', ['uses' => 'NascopController@syncClients', 'as' => 'nascop_sync']);
