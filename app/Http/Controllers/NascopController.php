@@ -8,7 +8,9 @@ ini_set('memory_limit', '4096M');
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ClientNascop;
+use App\AppointmentNascop;
 use App\Client;
+use App\Appointment;
 
 class NascopController extends Controller
 {
@@ -26,20 +28,20 @@ class NascopController extends Controller
                 ClientNascop::insertOrIgnore($client->toArray());
             }
         }
-
-        // $updates_availables = Client::where('partner_id', 18)->where('updated_at', '>', Carbon::now()->subDays(1))->get();
-        // foreach ($updates_availables as $updates_available) {
-        //     $FoundClients = ClientFaces::find($updates_available->id);
-        //     if ($FoundClients) {
-        //         if ($FoundClients->id === $updates_available->id && $FoundClients->clinic_number === $updates_available->clinic_number) {
-        //             if ($FoundClients->updated_at < $updates_available->updated_at) {
-        //                 echo "Updating existing Client..." . "<br>";
-        //                 ClientFaces::whereId($updates_available->id)->update($updates_available->toArray());
-        //             }
-        //         } else {
-        //             continue;
-        //         }
-        //     }
-        // }
+    }
+    public function syncAppointments()
+    {
+        $max_exisiting_appointment = AppointmentNascop::max('id') ?? 0;
+        $appointments = Appointment::join('tbl_client', 'tbl_appointment.client_id', '=', 'tbl_client.id')->select('tbl_appointment.*')->where('tbl_appointment.id', '>', $max_exisiting_appointment)->get();
+        foreach ($appointments as $appointment) {
+            $appFaces = AppointmentNascop::find($appointment->id);
+            if (!$appFaces) {
+                $check_client_existence = AppointmentNascop::find($appointment->client_id);
+                if ($check_client_existence) {
+                    echo "Insert new Appointment..." . "<br>";
+                    AppointmentNascop::insert($appointment->toArray());
+                }
+            }
+        }
     }
 }
