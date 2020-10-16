@@ -34,17 +34,17 @@ class SyncController extends Controller
   public function index()
   {
 
-    // $this->syncUsers();
+    $this->syncUsers();
     $this->syncClients();
-    // $this->syncClientOutcomes();
-    // $this->syncOtherAppType();
-    // $this->syncOtherFnlOutcome();
-    // $this->syncBroadcast();
-    // $this->syncSmsQueue();
-    // $this->syncTransitClients();
+    $this->syncClientOutcomes();
+    $this->syncOtherAppType();
+    $this->syncOtherFnlOutcome();
+    $this->syncBroadcast();
+    $this->syncSmsQueue();
+    $this->syncTransitClients();
     //$this->syncClientOutgoing();
     //$this->syncAppointments();
-    //$this->syncUserOutgoing();
+    $this->syncUserOutgoing();
   }
 
   public function syncUsers()
@@ -77,12 +77,12 @@ class SyncController extends Controller
 
       if (!$clientFaces) {
         echo "Inserting new Client..." . "<br>";
-        //ClientFaces::insertOrIgnore($client->toArray());
+        ClientFaces::insertOrIgnore($client->toArray());
       }
     }
 
-    //$updates_availables = Client::where('partner_id', 18)->where('updated_at', '>', Carbon::now()->subDays(1))->get();
-    $updates_availables = Client::where('partner_id', 18)->where('updated_at', '>', Carbon::now()->subDays(100))->get();
+    $updates_availables = Client::where('partner_id', 18)->where('updated_at', '>', Carbon::now()->subDays(1))->get();
+
 
     foreach ($updates_availables as $updates_available) {
       $FoundClients = ClientFaces::find($updates_available->id);
@@ -109,12 +109,12 @@ class SyncController extends Controller
         $check_client_existence = ClientFaces::find($appointment->client_id);
         if ($check_client_existence) {
           echo "Insert new Appointment..." . "<br>";
-          //AppointmentFaces::insert($appointment->toArray());
+          AppointmentFaces::insert($appointment->toArray());
         }
       }
     }
-    //$appointment_updates = Appointment::join('tbl_client', 'tbl_appointment.client_id', '=', 'tbl_client.id')->select('tbl_appointment.*')->where('tbl_appointment.updated_at', '>', Carbon::now()->subDays(1))->where('tbl_client.partner_id', 18)->get();
-    $appointment_updates = Appointment::join('tbl_client', 'tbl_appointment.client_id', '=', 'tbl_client.id')->select('tbl_appointment.*')->where('tbl_appointment.updated_at', '>', Carbon::now()->subDays(100))->where('tbl_client.partner_id', 18)->get();
+
+    $appointment_updates = Appointment::join('tbl_client', 'tbl_appointment.client_id', '=', 'tbl_client.id')->select('tbl_appointment.*')->where('tbl_appointment.updated_at', '>', Carbon::now()->subDays(1))->where('tbl_client.partner_id', 18)->get();
 
     foreach ($appointment_updates as $appointment_update) {
       $FoundApp = AppointmentFaces::find($appointment_update->id);
