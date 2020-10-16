@@ -109,7 +109,7 @@ class SyncController extends Controller
         $check_client_existence = ClientFaces::find($appointment->client_id);
         if ($check_client_existence) {
           echo "Insert new Appointment..." . "<br>";
-          AppointmentFaces::insert($appointment->toArray());
+          //AppointmentFaces::insert($appointment->toArray());
         }
       }
     }
