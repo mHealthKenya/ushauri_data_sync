@@ -45,7 +45,7 @@ class EGPAFSyncController extends Controller
 
         //$this->syncClientOutgoing();
         //$this->syncAppointments();
-        //$this->syncUserOutgoing();
+        $this->syncUserOutgoing();
     }
 
     public function syncUsers()

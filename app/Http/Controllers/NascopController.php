@@ -39,7 +39,7 @@ class NascopController extends Controller
                 $check_client_existence = AppointmentNascop::find($appointment->client_id);
                 if ($check_client_existence) {
                     echo "Insert new Appointment..." . "<br>";
-                    AppointmentNascop::insertOrIgnore($appointment->toArray());
+                    AppointmentNascop::insert($appointment->toArray());
                 }
             }
         }
