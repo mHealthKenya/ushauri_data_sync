@@ -9,16 +9,22 @@ use App\Appointment;
 use App\AppointmentFaces;
 use App\Broadcast;
 use App\BroadcastFaces;
+use App\CareGiver;
+use App\CareGiverFaces;
 use App\Client;
 use App\ClientFaces;
 use App\ClientOutcome;
 use App\ClientOutcomeFaces;
 use App\ClientOutgoing;
 use App\ClientOutgoingFaces;
+use App\DFC;
+use App\DFCFaces;
 use App\OtherAppType;
 use App\OtherAppTypeFaces;
 use App\OtherFnlOutcome;
 use App\OtherFnlOutcomeFaces;
+use App\PMTCT;
+use App\PmtctFaces;
 use App\SmsQueue;
 use App\SmsQueueFaces;
 use App\Transit;
@@ -35,6 +41,9 @@ class SyncController extends Controller
   {
 
     $this->syncUsers();
+    $this->sync_care_giver();
+    $this->syncPMTCT();
+    $this->sync_dfc();
     $this->syncClients();
     $this->syncClientOutcomes();
     $this->syncOtherAppType();
@@ -235,6 +244,45 @@ class SyncController extends Controller
       $transitFaces = TransitFaces::find($sms_transit->id);
       if (!$transitFaces) {
         TransitFaces::insert($sms_transit->toArray());
+      }
+    }
+  }
+
+  public function syncPMTCT()
+  {
+    $max_exisiting_mothers = PmtctFaces::max('id') ?? 0;
+    $mother_module = PMTCT::join('tbl_users', 'tbl_pmtct.created_by', '=', 'tbl_users.id')->select('tbl_pmtct.*')->where('tbl_pmtct.id', '>', $max_exisiting_mothers)->where('tbl_users.partner_id', 18)->get();
+    foreach ($mother_module as $mother) {
+      $motherFACES = PmtctFaces::find($mother->id);
+      if (!$motherFACES) {
+        echo "Insert pmtct clients..." . "<br>";
+        PmtctFaces::insertOrIgnore($mother->toArray());
+      }
+    }
+  }
+
+  public function sync_dfc()
+  {
+    $max_exisiting_dfc = DFCFaces::max('id') ?? 0;
+    $dfc_module = DFC::join('tbl_client', 'tbl_dfc_module.client_id', '=', 'tbl_client.id')->select('tbl_dfc_module.*')->where('tbl_dfc_module.id', '>', $max_exisiting_dfc)->where('tbl_client.partner_id', 18)->get();
+    foreach ($dfc_module as $dfc) {
+      $dfcFACES = DFCFaces::find($dfc->id);
+      if (!$dfcFACES) {
+        echo "Insert dfc clients..." . "<br>";
+        DFCFaces::insertOrIgnore($dfc->toArray());
+      }
+    }
+  }
+
+  public function sync_care_giver()
+  {
+    $max_exisiting_care_giver = CareGiverFaces::max('id') ?? 0;
+    $care_givers = CareGiver::join('tbl_users', 'tbl_caregiver_not_on_care.created_by', '=', 'tbl_users.id')->select('tbl_caregiver_not_on_care.*')->where('tbl_caregiver_not_on_care.id', '>', $max_exisiting_care_giver)->where('tbl_users.partner_id', 18)->get();
+    foreach ($care_givers as $giver) {
+      $careFACES = CareGiverFaces::find($giver->id);
+      if (!$careFACES) {
+        echo "Insert care giver details..." . "<br>";
+        CareGiverFaces::insertOrIgnore($giver->toArray());
       }
     }
   }

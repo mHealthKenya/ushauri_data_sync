@@ -9,16 +9,22 @@ use App\Appointment;
 use App\AppointmentEGPAF;
 use App\Broadcast;
 use App\BroadcastEGPAF;
+use App\CareGiver;
+use App\CareGiverEGPAF;
 use App\Client;
 use App\ClientEGPAF;
 use App\ClientOutcome;
 use App\ClientOutcomeEGPAF;
 use App\ClientOutgoing;
 use App\ClientOutgoingEGPAF;
+use App\DFC;
+use App\DFCEGPAF;
 use App\OtherAppType;
 use App\OtherAppTypeEGPAF;
 use App\OtherFnlOutcome;
 use App\OtherFnlOutcomeEGPAF;
+use App\PMTCT;
+use App\PmtctEGPAF;
 use App\SmsQueue;
 use App\SmsQueueEGPAF;
 use App\Transit;
@@ -34,6 +40,9 @@ class EGPAFSyncController extends Controller
     public function index()
     {
         $this->syncUsers();
+        $this->sync_caregiver();
+        $this->syncPMTCT();
+        $this->sync_dfc();
         $this->syncClients();
         $this->syncClientOutcomes();
         $this->syncOtherAppType();
@@ -232,6 +241,43 @@ class EGPAFSyncController extends Controller
             $transitEGPAF = TransitEGPAF::find($sms_transit->id);
             if (!$transitEGPAF) {
                 TransitEGPAF::insert($sms_transit->toArray());
+            }
+        }
+    }
+    public function syncPMTCT()
+    {
+        $max_exisiting_mothers = PmtctEGPAF::max('id') ?? 0;
+        $mother_module = PMTCT::join('tbl_users', 'tbl_pmtct.created_by', '=', 'tbl_users.id')->select('tbl_pmtct.*')->where('tbl_pmtct.id', '>', $max_exisiting_mothers)->where('tbl_users.partner_id', 1)->get();
+        foreach ($mother_module as $mother) {
+            $motherEGPAF = PmtctEGPAF::find($mother->id);
+            if (!$motherEGPAF) {
+                echo "Insert pmtct clients..." . "<br>";
+                PmtctEGPAF::insertOrIgnore($mother->toArray());
+            }
+        }
+    }
+
+    public function sync_dfc()
+    {
+        $max_exisiting_dfc = DFCEGPAF::max('id') ?? 0;
+        $dfc_module = DFC::join('tbl_client', 'tbl_dfc_module.client_id', '=', 'tbl_client.id')->select('tbl_dfc_module.*')->where('tbl_dfc_module.id', '>', $max_exisiting_dfc)->where('tbl_client.partner_id', 1)->get();
+        foreach ($dfc_module as $dfc) {
+            $dfcEGPAF = DFCEGPAF::find($dfc->id);
+            if (!$dfcEGPAF) {
+                echo "Insert dfc clients..." . "<br>";
+                DFCEGPAF::insertOrIgnore($dfc->toArray());
+            }
+        }
+    }
+    public function sync_caregiver()
+    {
+        $max_exisiting_care_giver = CareGiverEGPAF::max('id') ?? 0;
+        $care_givers = CareGiver::join('tbl_users', 'tbl_caregiver_not_on_care.created_by', '=', 'tbl_users.id')->select('tbl_caregiver_not_on_care.*')->where('tbl_caregiver_not_on_care.id', '>', $max_exisiting_care_giver)->where('tbl_users.partner_id', 1)->get();
+        foreach ($care_givers as $giver) {
+            $careEGPAF = CareGiverEGPAF::find($giver->id);
+            if (!$careEGPAF) {
+                echo "Insert care giver details..." . "<br>";
+                CareGiverEGPAF::insertOrIgnore($giver->toArray());
             }
         }
     }
