@@ -45,15 +45,15 @@ class SyncController extends Controller
     //$this->syncPMTCT();
     //$this->sync_dfc();
     //$this->syncClients();
-    $this->syncClientOutcomes();
-    // $this->syncOtherAppType();
-    // $this->syncOtherFnlOutcome();
-    // $this->syncBroadcast();
-    // $this->syncSmsQueue();
-    // $this->syncTransitClients();
+    //$this->syncClientOutcomes();
+    $this->syncOtherAppType();
+    $this->syncOtherFnlOutcome();
+    $this->syncBroadcast();
+    $this->syncSmsQueue();
+    $this->syncTransitClients();
     //$this->syncClientOutgoing();
     //$this->syncAppointments();
-    //$this->syncUserOutgoing();
+    $this->syncUserOutgoing();
   }
 
   public function syncUsers()
@@ -97,7 +97,7 @@ class SyncController extends Controller
     foreach ($updates_availables as $updates_available) {
       $FoundClients = ClientFaces::find($updates_available->id);
       if ($FoundClients) {
-        if ($FoundClients->id === $updates_available->id && $FoundClients->clinic_number === $updates_available->clinic_number) {
+        if ($FoundClients->id === $updates_available->id) {
           if ($FoundClients->updated_at < $updates_available->updated_at) {
             echo "Updating existing Client..." . " " . "$FoundClients->id" . "<br>";
             ClientFaces::whereId($updates_available->id)->update($updates_available->toArray());
