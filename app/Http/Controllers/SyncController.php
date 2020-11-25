@@ -40,20 +40,20 @@ class SyncController extends Controller
   public function index()
   {
 
-    $this->syncUsers();
-    $this->sync_care_giver();
-    $this->syncPMTCT();
-    $this->sync_dfc();
-    $this->syncClients();
+    // $this->syncUsers();
+    // $this->sync_care_giver();
+    //$this->syncPMTCT();
+    //$this->sync_dfc();
+    //$this->syncClients();
     $this->syncClientOutcomes();
-    $this->syncOtherAppType();
-    $this->syncOtherFnlOutcome();
-    $this->syncBroadcast();
-    $this->syncSmsQueue();
-    $this->syncTransitClients();
+    // $this->syncOtherAppType();
+    // $this->syncOtherFnlOutcome();
+    // $this->syncBroadcast();
+    // $this->syncSmsQueue();
+    // $this->syncTransitClients();
     //$this->syncClientOutgoing();
     //$this->syncAppointments();
-    $this->syncUserOutgoing();
+    //$this->syncUserOutgoing();
   }
 
   public function syncUsers()
@@ -79,6 +79,7 @@ class SyncController extends Controller
   public function syncClients()
   {
     $max_exisiting_client = ClientFaces::max('id') ?? 0;
+
 
     $clients = Client::where('partner_id', 18)->where('id', '>', $max_exisiting_client)->get();
     foreach ($clients as $client) {
