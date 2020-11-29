@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 ini_set('max_execution_time', 0);
-ini_set('memory_limit', '4096M');
+ini_set('memory_limit', '6144');
 
 use App\Appointment;
 use App\AppointmentFaces;
