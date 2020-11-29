@@ -48,7 +48,7 @@ class SyncController extends Controller
     $this->sync_dfc();
     $this->syncClientOutcomes();
     $this->syncOtherAppType();
-    $this->syncOtherFnlOutcome();
+    //$this->syncOtherFnlOutcome();
     // $this->syncBroadcast();
     // $this->syncSmsQueue();
     $this->syncTransitClients();
