@@ -49,8 +49,8 @@ class SyncController extends Controller
     $this->syncClientOutcomes();
     $this->syncOtherAppType();
     $this->syncOtherFnlOutcome();
-    $this->syncBroadcast();
-    $this->syncSmsQueue();
+    // $this->syncBroadcast();
+    // $this->syncSmsQueue();
     $this->syncTransitClients();
     $this->syncUserOutgoing();
 

@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Route::get('/sync', ['uses' => 'SyncController@index', 'as' => 'sync']);
-Route::get('/sync_app', ['uses' => 'SyncController@syncAppointments', 'as' => 'sync_app']);
+Route::get('/sync_other', ['uses' => 'SyncController@syncOtherFnlOutcome', 'as' => 'sync_other']);
 Route::get('/sync_msg', ['uses' => 'SyncController@syncClientOutgoing', 'as' => 'sync_msg']);
 Route::get('/egpaf/sync', ['uses' => 'EGPAFSyncController@index', 'as' => 'egpaf_sync']);
 Route::get('/egpaf/sync_app', ['uses' => 'EGPAFSyncController@syncAppointments', 'as' => 'egpaf_sync_app']);
