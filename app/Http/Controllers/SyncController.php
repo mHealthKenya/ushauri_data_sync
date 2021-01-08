@@ -43,15 +43,15 @@ class SyncController extends Controller
     // $this->syncUsers();
     // $this->sync_care_giver();
     // $this->syncClients();
-    $this->syncAppointments();
-    // $this->syncPMTCT();
-    // $this->sync_dfc();
-    // $this->syncClientOutcomes();
-    // $this->syncOtherAppType();
+    // $this->syncAppointments();
+    $this->syncPMTCT();
+    $this->sync_dfc();
+    $this->syncClientOutcomes();
+    $this->syncOtherAppType();
     // $this->syncOtherFnlOutcome();t
     // $this->syncBroadcast();t
     // $this->syncSmsQueue();t
-    // $this->syncTransitClients();
+    $this->syncTransitClients();
     // $this->syncUserOutgoing();t
 
     //$this->syncClientOutgoing();t
