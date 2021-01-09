@@ -83,7 +83,7 @@ class SyncController extends Controller
 
 
     $clients = Client::where('partner_id', 18)
-      // ->where('id', '>', $max_exisiting_client)
+      ->where('id', '>', $max_exisiting_client)
       ->get();
     foreach ($clients as $client) {
       $clientFaces = ClientFaces::find($client->id);
