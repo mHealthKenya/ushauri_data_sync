@@ -174,7 +174,7 @@ class SyncController extends Controller
       }
       $end_time = Carbon::now();
       
-      $this->send_email($start_time, $end_time, $appointments->count() + $appointment_updates->count() . " Appointments", $a_number . " Appointments", "Appointments sync");
+      $this->send_email($start_time, $end_time,  $appointment_updates->count() . " Appointments", $a_number . " Appointments", "Appointments sync");
     } catch (\Exception $e) {
       $this->send_err_email($e->getMessage(), "Appointments sync");
     }
